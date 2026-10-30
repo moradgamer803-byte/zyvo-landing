@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZYVO — Design Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08090D;
+  --surface: #11131B;
+  --primary: #8757FF;
+  --accent: #4DEBFF;
+  --text: #F5F5F7;
+  --muted: #9295A5;
+  --line: rgba(255,255,255,0.06);
+  --radius: 20px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 48px;
+  --space-6: 96px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; line-height: 1.6; overflow-x: hidden; }
+.preview-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(8,9,13,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); padding: 12px 24px; display: flex; align-items: center; gap: 16px; font-size: 14px; }
+.preview-bar strong { color: var(--accent); }
+.preview-bar span { color: var(--muted); }
+.direction { padding: var(--space-6) var(--space-4); border-bottom: 1px solid var(--line); position: relative; }
+.direction-label { display: flex; align-items: center; gap: 12px; margin-bottom: var(--space-5); }
+.direction-num { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; flex-shrink: 0; }
+.direction-name { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; }
+.direction-mood { color: var(--muted); font-size: 14px; }
+.grid-bg { position: absolute; inset: 0; background-image: linear-gradient(rgba(135,87,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(135,87,255,0.03) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; }
+.orb { width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #8757FF, #4DEBFF 40%, transparent 70%); filter: blur(40px); opacity: 0.6; position: absolute; }
+.orb-sm { width: 180px; height: 180px; }
+.navbar { display: flex; align-items: center; justify-content: space-between; max-width: 1120px; margin: 0 auto var(--space-6); padding: 0 var(--space-4); }
+.logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 24px; letter-spacing: -0.02em; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 15px; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-weight: 600; font-size: 15px; text-decoration: none; transition: all 0.3s cubic-bezier(0.16,1,0.3,1); cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(135,87,255,0.3); }
+.btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+.btn-ghost:hover { border-color: var(--primary); }
+.hero { max-width: 1120px; margin: 0 auto; position: relative; z-index: 1; }
+.hero-centered { text-align: center; }
+.hero-centered h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(3rem, 8vw, 6rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 24px; }
+.hero-centered p { color: var(--muted); font-size: 1.15rem; max-width: 600px; margin: 0 auto 32px; line-height: 1.7; }
+.hero-centered .btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.hero-split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.hero-split h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 20px; }
+.hero-split p { color: var(--muted); font-size: 1.1rem; margin-bottom: 32px; line-height: 1.7; }
+.hero-split .visual { position: relative; height: 400px; display: flex; align-items: center; justify-content: center; }
+.hero-minimal { padding: var(--space-6) 0; }
+.hero-minimal .eyebrow { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 24px; }
+.hero-minimal h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(4rem, 12vw, 9rem); font-weight: 700; letter-spacing: -0.04em; line-height: 0.95; margin-bottom: 32px; }
+.hero-minimal .sub { color: var(--muted); font-size: 1.1rem; max-width: 500px; margin-bottom: 40px; line-height: 1.7; }
+.hero-minimal .btns { display: flex; gap: 16px; flex-wrap: wrap; }
+.features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 1120px; margin: var(--space-5) auto 0; }
+.feature-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 32px; transition: transform 0.3s, border-color 0.3s; }
+.feature-card:hover { transform: translateY(-4px); border-color: rgba(135,87,255,0.3); }
+.feature-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-bottom: 8px; }
+.feature-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+.feature-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; background: linear-gradient(135deg, rgba(135,87,255,0.15), rgba(77,235,255,0.1)); color: var(--accent); font-size: 18px; }
+@media (max-width: 768px) {
+  .hero-split { grid-template-columns: 1fr; }
+  .hero-split .visual { height: 250px; }
+  .features { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="preview-bar">
+  <strong>ZYVO</strong>
+  <span>— Pick a design direction (1, 2, or 3). Mix allowed: "2 er layout + 1 er color"</span>
+</div>
+
+<!-- DIRECTION 1 -->
+<section class="direction" style="padding-top: 80px;">
+  <div class="grid-bg"></div>
+  <div class="direction-label">
+    <div class="direction-num">1</div>
+    <div>
+      <div class="direction-name">Centered Orb</div>
+      <div class="direction-mood">bold · luminous · centered — classic premium tech hero</div>
+    </div>
+  </div>
+  <nav class="navbar">
+    <div class="logo">ZYVO</div>
+    <ul class="nav-links"><li><a href="#">Home</a></li><li><a href="#">About</a></li><li><a href="#">Features</a></li><li><a href="#">Vision</a></li></ul>
+    <a href="#" class="btn btn-primary">Get Started</a>
+  </nav>
+  <div class="hero hero-centered" style="position:relative;">
+    <div class="orb" style="top:-60px; left:50%; transform:translateX(-50%);"></div>
+    <h1>Beyond The<br>Ordinary.</h1>
+    <p>Technology moves forward. So do we. Discover a new perspective on innovation with ZYVO.</p>
+    <div class="btns">
+      <a href="#" class="btn btn-primary">Explore ZYVO</a>
+      <a href="#" class="btn btn-ghost">Discover More</a>
+    </div>
+  </div>
+  <div class="features">
+    <div class="feature-card"><div class="feature-icon">⚡</div><h3>Innovation</h3><p>Always exploring new possibilities.</p></div>
+    <div class="feature-card"><div class="feature-icon">🚀</div><h3>Performance</h3><p>Built for speed and efficiency.</p></div>
+    <div class="feature-card"><div class="feature-icon">✨</div><h3>Experience</h3><p>Simple, intuitive and seamless.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔄</div><h3>Evolution</h3><p>Constantly moving forward.</p></div>
+  </div>
+</section>
+
+<!-- DIRECTION 2 -->
+<section class="direction">
+  <div class="grid-bg"></div>
+  <div class="direction-label">
+    <div class="direction-num">2</div>
+    <div>
+      <div class="direction-name">Asymmetric Split</div>
+      <div class="direction-mood">precise · editorial · split-screen — text left, visual right</div>
+    </div>
+  </div>
+  <nav class="navbar">
+    <div class="logo">ZYVO</div>
+    <ul class="nav-links"><li><a href="#">Home</a></li><li><a href="#">About</a></li><li><a href="#">Features</a></li><li><a href="#">Vision</a></li></ul>
+    <a href="#" class="btn btn-primary">Get Started</a>
+  </nav>
+  <div class="hero hero-split">
+    <div>
+      <h1>Beyond The Ordinary.</h1>
+      <p>Technology moves forward. So do we. Discover a new perspective on innovation with ZYVO.</p>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;">
+        <a href="#" class="btn btn-primary">Explore ZYVO</a>
+        <a href="#" class="btn btn-ghost">Discover More</a>
+      </div>
+    </div>
+    <div class="visual">
+      <div class="orb orb-sm" style="position:relative;"></div>
+      <div class="orb" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:220px; height:220px; opacity:0.4;"></div>
+    </div>
+  </div>
+  <div class="features">
+    <div class="feature-card"><div class="feature-icon">⚡</div><h3>Innovation</h3><p>Always exploring new possibilities.</p></div>
+    <div class="feature-card"><div class="feature-icon">🚀</div><h3>Performance</h3><p>Built for speed and efficiency.</p></div>
+    <div class="feature-card"><div class="feature-icon">✨</div><h3>Experience</h3><p>Simple, intuitive and seamless.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔄</div><h3>Evolution</h3><p>Constantly moving forward.</p></div>
+  </div>
+</section>
+
+<!-- DIRECTION 3 -->
+<section class="direction">
+  <div class="grid-bg"></div>
+  <div class="direction-label">
+    <div class="direction-num">3</div>
+    <div>
+      <div class="direction-name">Oversized Minimal</div>
+      <div class="direction-mood">restrained · massive type · whitespace — Apple-level calm</div>
+    </div>
+  </div>
+  <nav class="navbar">
+    <div class="logo">ZYVO</div>
+    <ul class="nav-links"><li><a href="#">Home</a></li><li><a href="#">About</a></li><li><a href="#">Features</a></li><li><a href="#">Vision</a></li></ul>
+    <a href="#" class="btn btn-primary">Get Started</a>
+  </nav>
+  <div class="hero hero-minimal">
+    <div class="eyebrow">Beyond The Ordinary.</div>
+    <h1>Beyond<br>The<br>Ordinary.</h1>
+    <p class="sub">Technology moves forward. So do we. Discover a new perspective on innovation with ZYVO.</p>
+    <div class="btns">
+      <a href="#" class="btn btn-primary">Explore ZYVO</a>
+      <a href="#" class="btn btn-ghost">Discover More</a>
+    </div>
+  </div>
+  <div class="features">
+    <div class="feature-card"><div class="feature-icon">⚡</div><h3>Innovation</h3><p>Always exploring new possibilities.</p></div>
+    <div class="feature-card"><div class="feature-icon">🚀</div><h3>Performance</h3><p>Built for speed and efficiency.</p></div>
+    <div class="feature-card"><div class="feature-icon">✨</div><h3>Experience</h3><p>Simple, intuitive and seamless.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔄</div><h3>Evolution</h3><p>Constantly moving forward.</p></div>
+  </div>
+</section>
+</body>
+</html>
